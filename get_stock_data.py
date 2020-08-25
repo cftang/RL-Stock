@@ -43,17 +43,20 @@ class Downloader(object):
             df_code = bs.query_history_k_data_plus(row["code"], self.fields,
                                                    start_date=self.date_start,
                                                    end_date=self.date_end).get_data()
-            df_code.to_csv(f'{self.output_dir}/{row["code"]}.{row["code_name"]}.csv', index=False)
+            code_name = row["code_name"].replace('*', '')
+            df_code.to_csv(
+                f'{self.output_dir}/{row["code"]}.{code_name}.csv', index=False)
         self.exit()
 
 
 if __name__ == '__main__':
     # 获取全部股票的日K线数据
     mkdir('./stockdata/train')
-    downloader = Downloader('./stockdata/train', date_start='1990-01-01', date_end='2019-11-29')
+    downloader = Downloader('./stockdata/train',
+                            date_start='1990-01-01', date_end='2020-04-30')
     downloader.run()
 
     mkdir('./stockdata/test')
-    downloader = Downloader('./stockdata/test', date_start='2019-12-01', date_end='2019-12-31')
+    downloader = Downloader(
+        './stockdata/test', date_start='2020-05-01', date_end='2020-05-14')
     downloader.run()
-
